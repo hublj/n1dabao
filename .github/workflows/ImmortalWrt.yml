@@ -3,15 +3,6 @@ name: Build ImmortalWrt-N1 67+o and 67+
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      days:
-        description: 'Number of days.'
-        required: true
-        default: 60
-      minimum_runs:
-        description: 'The minimum runs to keep for each workflow.'
-        required: true
-        default: 6
   #schedule:
     #- cron: 0 23 * * *      
 env:
@@ -27,11 +18,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - flippy_name: 67+o
-            release_name: openwrt_s905d_n1_k5.4-67+o.img
           - flippy_name: 67+
             release_name: openwrt_s905d_n1_k5.14-67+.img
-
+          - flippy_name: 67+o
+            release_name: openwrt_s905d_n1_k5.4-67+o.img
+          - flippy_name: 67+plus
+            release_name: openwrt_s905d_n1_k5.15-67+plus.img
+    
     env:
       FLIPPY_NAME: ${{ matrix.flippy_name }}   
       RELEASE_NAME: ${{ matrix.release_name }}
@@ -49,7 +42,11 @@ jobs:
         
         sudo chmod  -R 777 /opt
         cp -r ${FLIPPY_NAME}/opt/* /opt
-                
+        cd /opt
+        git clone https://github.com/unifreq/openwrt_packit        
+        cd -
+        cp /opt/whoami /opt/openwrt_packit
+    
     - name: Download
       run: |
         cd /opt/openwrt_packit
@@ -88,7 +85,8 @@ jobs:
       run: |
         sudo chmod -R 777 /opt/openwrt_packit/output
         cd /opt/openwrt_packit/output
-        sudo pigz -9 $RELEASE_NAME
+        sudo pigz -9 -p 2 -k *
+        rm -rf openwrt-update-amlogic.gz openwrt_s905d_n1_R21.11.11_k5.14.17-flippy-67+.img openwrt_s905d_n1_R21.11.11_k5.15.1-flippy-67+.img openwrt_s905d_n1_R21.11.11_k5.4.158-flippy-67+o.img
         echo "::set-output name=status::success"
     
     - name: Check Files4
@@ -104,7 +102,7 @@ jobs:
       id: release
       uses: ncipollo/release-action@v1
       with:
-        name: ${{ env.DATE }} 🚀 N1-Openwrt-img | 编译
+        name: ${{ env.DATE }} 🚀 N1-Openwrt-img | 打包
         allowUpdates: true
         tag: ${{ env.version }}
         commit: main
