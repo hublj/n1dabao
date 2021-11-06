@@ -1,4 +1,4 @@
-name: Build ImmortalWrt-N1 66+o and 66+
+name: Build ImmortalWrt-N1 67+o and 67+
 
 on:
   repository_dispatch:
@@ -27,10 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - flippy_name: 66+o
-            release_name: openwrt_s905d_n1_k5.4-66+o.img
-          - flippy_name: 66+
-            release_name: openwrt_s905d_n1_k5.14-66+.img
+          - flippy_name: 67+o
+            release_name: openwrt_s905d_n1_k5.4-67+o.img
+          - flippy_name: 67+
+            release_name: openwrt_s905d_n1_k5.14-67+.img
 
     env:
       FLIPPY_NAME: ${{ matrix.flippy_name }}   
