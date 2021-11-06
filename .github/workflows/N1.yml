@@ -3,15 +3,6 @@ name: Build N1 67+o and 67+
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
-      days:
-        description: 'Number of days.'
-        required: true
-        default: 60
-      minimum_runs:
-        description: 'The minimum runs to keep for each workflow.'
-        required: true
-        default: 6
   #schedule:
     #- cron: 0 23 * * *      
 env:
@@ -94,7 +85,7 @@ jobs:
       run: |
         sudo chmod -R 777 /opt/openwrt_packit/output
         cd /opt/openwrt_packit/output
-        sudo pigz -9 $RELEASE_NAME
+        sudo pigz -9 -p 2 -k *
         echo "::set-output name=status::success"
     
     - name: Check Files4
