@@ -102,7 +102,7 @@ jobs:
       id: release
       uses: ncipollo/release-action@v1
       with:
-        name: ${{ env.DATE }} 🚀 N1-Openwrt-img | 编译
+        name: ${{ env.DATE }} 🚀 N1-Openwrt-img | 打包
         allowUpdates: true
         tag: ${{ env.version }}
         commit: main
